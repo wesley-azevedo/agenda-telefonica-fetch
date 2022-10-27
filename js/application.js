@@ -2,6 +2,10 @@
 // POST - subir/adicionar/enviar/criar
 // PUT - atualizar/alterar/
 // DELETE - apagar/deletar/destruir/remover/aniquilar
+function logout() {
+    localStorage.setItem('logged', false);
+    window.location.href = "login.html"
+}
 
 async function addContato(){
     let dados = input_nova_tarefa.value.split(" ")
