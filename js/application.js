@@ -63,6 +63,8 @@ async function atualizarContatos() {
     contactList = JSON.parse(localStorage.getItem('contactList'))
     console.log(contactList)
 
+    numberOfContacts.innerHTML = contactList.length
+
     contactList.forEach(item => {
         let contact = document.createElement("tr");
         contact.id = `contact${item.id}`;
@@ -86,7 +88,7 @@ async function atualizarContatos() {
 
         let editBtn = document.createElement("input");
         editBtn.type = 'button'
-        editBtn.value = 'editar'
+        editBtn.value = 'editar'      
         document.querySelector(`#${options.id}`).appendChild(editBtn);
 
         let deleteBtn = document.createElement("input");
@@ -95,6 +97,9 @@ async function atualizarContatos() {
         document.querySelector(`#${options.id}`).appendChild(deleteBtn);
 
     })
+
+    
+
 }
 
 async function deletar(identificador) {
