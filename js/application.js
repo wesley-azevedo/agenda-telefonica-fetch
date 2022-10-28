@@ -59,32 +59,41 @@ async function atualizarContatos() {
 
     let response = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa3');
     let body = await response.json();
-    console.log(body);
+    localStorage.setItem('contactList', JSON.stringify(body))
+    contactList = JSON.parse(localStorage.getItem('contactList'))
+    console.log(contactList)
 
-    body.forEach(item => {
+    contactList.forEach(item => {
         let contact = document.createElement("tr");
-        console.log(document.createElement("tr"));
         contact.id = `contact${item.id}`;
-        console.log(contact.id);
         document.querySelector('#contactsBody').appendChild(contact);
         
         let id = document.createElement("td");
         id.innerHTML = `${item.id}`;
-        console.log(id.value);
-        console.log(`#${contact.id}`)
         document.querySelector(`#${contact.id}`).appendChild(id);
 
         let name = document.createElement("td");
         name.innerHTML = `${item.nome}`;
-        console.log(name.value);
-        console.log(`#${contact.id}`)
         document.querySelector(`#${contact.id}`).appendChild(name);
 
         let phone = document.createElement("td");
-        phone.innerHTML = `${item.idade     }`;
-        console.log(phone.value);
-        console.log(`#${contact.id}`)
+        phone.innerHTML = `${item.idade}`;
         document.querySelector(`#${contact.id}`).appendChild(phone);
+
+        let options = document.createElement("td");
+        options.id = `options${item.id}`;
+        document.querySelector(`#${contact.id}`).appendChild(options);
+
+        let editBtn = document.createElement("input");
+        editBtn.type = 'button'
+        editBtn.value = 'editar'
+        document.querySelector(`#${options.id}`).appendChild(editBtn);
+
+        let deleteBtn = document.createElement("input");
+        deleteBtn.type = 'button'
+        deleteBtn.value = 'excluir'
+        document.querySelector(`#${options.id}`).appendChild(deleteBtn);
+
     })
 }
 
