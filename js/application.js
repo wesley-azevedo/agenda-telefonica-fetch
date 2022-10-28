@@ -1,19 +1,21 @@
-// GET - pegar/trazer/listar
-// POST - subir/adicionar/enviar/criar
-// PUT - atualizar/alterar/
-// DELETE - apagar/deletar/destruir/remover/aniquilar
+function checkCredential() {
+    if (localStorage.getItem('logged') === false) {
+        window.location.href = "login.html"
+    }
+}
+
 function logout() {
     localStorage.setItem('logged', false);
     window.location.href = "login.html"
 }
 
-async function addContato(){
+async function addContato() {
     let dados = input_nova_tarefa.value.split(" ")
     let nome = dados[0]
     let idade = dados[1]
-    let chuchu = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa3',{
+    let chuchu = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa3', {
         method: "POST",
-        headers:{
+        headers: {
             'content-type': 'application/json'
         },
         body: JSON.stringify({
@@ -22,19 +24,19 @@ async function addContato(){
         })
     })
     console.log(chuchu)
-    if(chuchu.ok){
+    if (chuchu.ok) {
         console.log('adicionei')
         atualizarContatos()
     }
 }
 
-async function atualizar(identificador){
+async function atualizar(identificador) {
     let nomeNovo = prompt("nome?")
     let idadeNovo = prompt("idade?")
 
     let res = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa3/' + identificador, {
         method: 'PUT',
-        headers:{
+        headers: {
             'content-type': 'application/json'
         },
         body: JSON.stringify({
@@ -42,10 +44,10 @@ async function atualizar(identificador){
             idade: idadeNovo
         })
     });
-    if(res.ok){
+    if (res.ok) {
         alert('Atualizou')
         atualizarContatos()
-    }else{
+    } else {
         alert('Erro ao atualizar')
     }
 
@@ -53,27 +55,46 @@ async function atualizar(identificador){
 
 atualizarContatos();
 
-async function atualizarContatos(){
-    let resposta = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa3')
-    let body = await resposta.json()
-    tarefas.innerHTML = "<ul>"
-    body.forEach(pessoa => {
-        tarefas.innerHTML +=  ` 
-        <li>${pessoa.nome} - ${pessoa.idade} 
-            <button onclick="deletar(${pessoa.id})">Deletar</button>
-            <button onclick="atualizar(${pessoa.id})">Atualizar</button>
-        </li>`
-    });
-    tarefas.innerHTML +=  "</ul>"
+async function atualizarContatos() {
+
+    let response = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa3');
+    let body = await response.json();
+    console.log(body);
+
+    body.forEach(item => {
+        let contact = document.createElement("tr");
+        console.log(document.createElement("tr"));
+        contact.id = `contact${item.id}`;
+        console.log(contact.id);
+        document.querySelector('#contactsBody').appendChild(contact);
+        
+        let id = document.createElement("td");
+        id.innerHTML = `${item.id}`;
+        console.log(id.value);
+        console.log(`#${contact.id}`)
+        document.querySelector(`#${contact.id}`).appendChild(id);
+
+        let name = document.createElement("td");
+        name.innerHTML = `${item.nome}`;
+        console.log(name.value);
+        console.log(`#${contact.id}`)
+        document.querySelector(`#${contact.id}`).appendChild(name);
+
+        let phone = document.createElement("td");
+        phone.innerHTML = `${item.idade     }`;
+        console.log(phone.value);
+        console.log(`#${contact.id}`)
+        document.querySelector(`#${contact.id}`).appendChild(phone);
+    })
 }
 
-async function deletar(identificador){
+async function deletar(identificador) {
     let res = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa3/' + identificador, {
         method: 'DELETE',
     });
-    if(res.ok){
+    if (res.ok) {
         atualizarContatos();
-    } else{
+    } else {
         console.log(res.statusText)
     }
 }
