@@ -35,7 +35,6 @@ async function updateContacts() {
     let body = await response.json();
     localStorage.setItem('contactList', JSON.stringify(body))
     contactList = JSON.parse(localStorage.getItem('contactList'))
-    console.log(contactList)
 }
 
 async function addContact() {
@@ -84,14 +83,17 @@ function escreverHTML() {
             options.id = `options${item.id}`;
             document.querySelector(`#${contact.id}`).appendChild(options);
 
-            let editBtn = document.createElement("input");
+            let editBtn = document.createElement("button");
             editBtn.type = 'button'
-            editBtn.value = 'editar'
+            editBtn.innerHTML = 'editar'
+            editBtn.classList = "btn btn-outline-secondary m-1"
+            editBtn.addEventListener = ('click', () => {atualizar(item.id);});
             document.querySelector(`#${options.id}`).appendChild(editBtn);
 
-            let deleteBtn = document.createElement("input");
+            let deleteBtn = document.createElement("button");
             deleteBtn.type = 'button'
-            deleteBtn.value = 'excluir'
+            deleteBtn.innerHTML = 'excluir'
+            deleteBtn.classList = "btn btn-outline-secondary m-1"
             document.querySelector(`#${options.id}`).appendChild(deleteBtn);
         })
     } else {
@@ -117,14 +119,19 @@ function escreverHTML() {
             options.id = `options${item.id}`;
             document.querySelector(`#${contact.id}`).appendChild(options);
 
-            let editBtn = document.createElement("input");
+            let editBtn = document.createElement("button");
+            editBtn.id = item.id
             editBtn.type = 'button'
-            editBtn.value = 'editar'
+            editBtn.innerHTML = 'editar'
+            editBtn.addEventListener = ('click', () => {atualizar(`${editBtn.id}`)});
+            editBtn.classList = "btn btn-outline-secondary m-1"         
             document.querySelector(`#${options.id}`).appendChild(editBtn);
-
-            let deleteBtn = document.createElement("input");
+            
+        
+            let deleteBtn = document.createElement("button");
             deleteBtn.type = 'button'
-            deleteBtn.value = 'excluir'
+            deleteBtn.innerHTML = 'excluir'
+            deleteBtn.classList = "btn btn-outline-secondary m-1"
             document.querySelector(`#${options.id}`).appendChild(deleteBtn);
         })
     }
@@ -143,20 +150,7 @@ function searchContact() {
         localStorage.setItem('contactFilter', [0])
         window.location.reload(false);
     }
-
-
-
 }
-
-// Parte de cima foi ajustada.
-
-
-
-
-
-
-
-
 
 async function atualizar(identificador) {
     let nomeNovo = prompt("nome?")
