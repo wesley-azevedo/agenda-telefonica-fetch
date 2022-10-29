@@ -1,6 +1,8 @@
 function checkCredential() {
     if (localStorage.getItem('logged') === false) {
         window.location.href = "login.html"
+    } else {
+        updateContacts();
     }
 }
 
@@ -9,53 +11,28 @@ function logout() {
     window.location.href = "login.html"
 }
 
-async function addContato() {
-    let dados = input_nova_tarefa.value.split(" ")
-    let nome = dados[0]
-    let idade = dados[1]
-    let chuchu = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa3', {
+async function addContact() {
+    let addName = inputAddName.value
+    let addPhone = inputAddPhone.value
+    let addNewContact = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa3', {
         method: "POST",
         headers: {
             'content-type': 'application/json'
         },
         body: JSON.stringify({
-            nome: nome,
-            idade: idade
+            nome: addName,
+            idade: addPhone
         })
     })
-    console.log(chuchu)
-    if (chuchu.ok) {
+    console.log(addNewContact)
+    if (addNewContact.ok) {
         console.log('adicionei')
-        atualizarContatos()
+        updateContacts()
+        window.location.reload(false);
     }
 }
 
-async function atualizar(identificador) {
-    let nomeNovo = prompt("nome?")
-    let idadeNovo = prompt("idade?")
-
-    let res = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa3/' + identificador, {
-        method: 'PUT',
-        headers: {
-            'content-type': 'application/json'
-        },
-        body: JSON.stringify({
-            nome: nomeNovo,
-            idade: idadeNovo
-        })
-    });
-    if (res.ok) {
-        alert('Atualizou')
-        atualizarContatos()
-    } else {
-        alert('Erro ao atualizar')
-    }
-
-}
-
-atualizarContatos();
-
-async function atualizarContatos() {
+async function updateContacts() {
 
     let response = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa3');
     let body = await response.json();
@@ -95,10 +72,47 @@ async function atualizarContatos() {
         deleteBtn.type = 'button'
         deleteBtn.value = 'excluir'
         document.querySelector(`#${options.id}`).appendChild(deleteBtn);
+    }) 
+}
 
-    })
+function searchContact() {
+    const filterName = nameFilter.value
+    console.log(filterName)
+}
 
-    
+// Parte de cima foi ajustada.
+
+
+
+
+
+
+
+
+
+
+
+
+async function atualizar(identificador) {
+    let nomeNovo = prompt("nome?")
+    let idadeNovo = prompt("idade?")
+
+    let res = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa3/' + identificador, {
+        method: 'PUT',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            nome: nomeNovo,
+            idade: idadeNovo
+        })
+    });
+    if (res.ok) {
+        alert('Atualizou')
+        updateContacts()
+    } else {
+        alert('Erro ao atualizar')
+    }
 
 }
 
@@ -107,7 +121,7 @@ async function deletar(identificador) {
         method: 'DELETE',
     });
     if (res.ok) {
-        atualizarContatos();
+        updateContacts();
     } else {
         console.log(res.statusText)
     }
