@@ -25,7 +25,9 @@
             </div>
             <div class="col-4 d-grid gap-2 d-md-flex justify-content-md-end"">
               <button type=" button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addContact">
-              Adicionar</button>
+              Adicionar <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"/>
+              </svg></i></button>
               <div id="addContact" class="modal fade">
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
@@ -61,17 +63,8 @@
         <div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="Digite um nome para pesquisar" aria-label="Names filter" aria-describedby="searchButton" id="nameFilter">
           <button class="btn btn-outline-secondary" type="button" id="searchButton" onclick="searchContact()">Buscar</button>
+          <button onclick="">ordem</button>
         </div>
-
-        <!-- <div class="col-9">
-          <input id="input_nova_tarefa" placeholder="Nova Contato" type="text" class="form-control" />
-        </div>
-
-        <div class="col-3 d-grid">
-          <button class="btn btn-outline-primary" onclick="addContato()">
-            Pronto!
-          </button>
-        </div> -->
 
         <hr/>
 
