@@ -87,14 +87,16 @@ function escreverHTML() {
             editBtn.type = 'button'
             editBtn.innerHTML = 'editar'
             editBtn.classList = "btn btn-outline-secondary m-1"
-            editBtn.addEventListener = ('click', () => {atualizar(item.id);});
+            editBtn.addEventListener("click", () => {updateContact(item.id)})
             document.querySelector(`#${options.id}`).appendChild(editBtn);
 
             let deleteBtn = document.createElement("button");
             deleteBtn.type = 'button'
             deleteBtn.innerHTML = 'excluir'
             deleteBtn.classList = "btn btn-outline-secondary m-1"
+            deleteBtn.addEventListener("click", () => {deleteContact(item.id)})
             document.querySelector(`#${options.id}`).appendChild(deleteBtn);
+            
         })
     } else {
         numberOfContacts.innerHTML = contactList.length
@@ -123,7 +125,7 @@ function escreverHTML() {
             editBtn.id = item.id
             editBtn.type = 'button'
             editBtn.innerHTML = 'editar'
-            editBtn.addEventListener = ('click', () => {atualizar(`${editBtn.id}`)});
+            editBtn.addEventListener("click", () => {updateContact(item.id)})
             editBtn.classList = "btn btn-outline-secondary m-1"         
             document.querySelector(`#${options.id}`).appendChild(editBtn);
             
@@ -131,6 +133,7 @@ function escreverHTML() {
             let deleteBtn = document.createElement("button");
             deleteBtn.type = 'button'
             deleteBtn.innerHTML = 'excluir'
+            deleteBtn.addEventListener("click", () => {deleteContact(item.id)})
             deleteBtn.classList = "btn btn-outline-secondary m-1"
             document.querySelector(`#${options.id}`).appendChild(deleteBtn);
         })
@@ -152,31 +155,29 @@ function searchContact() {
     }
 }
 
-async function atualizar(identificador) {
-    let nomeNovo = prompt("nome?")
-    let idadeNovo = prompt("idade?")
+async function updateContact(id) {
+    let editedName = prompt("nome?")
+    let editedPhone = prompt("idade?")
 
-    let res = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa/' + identificador, {
+    let response = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa/' + id, {
         method: 'PUT',
         headers: {
             'content-type': 'application/json'
         },
         body: JSON.stringify({
-            nome: nomeNovo,
-            idade: idadeNovo
+            nome: editedName,
+            idade: editedPhone
         })
     });
-    if (res.ok) {
-        alert('Atualizou')
-        updateContacts()
+    if (response.ok) {
+        window.location.reload(false);        
     } else {
-        alert('Erro ao atualizar')
+        alert('erro ao atualizar contato')
     }
-
 }
 
-async function deletar(identificador) {
-    let res = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa/' + identificador, {
+async function deleteContact(id) {
+    let res = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa/' + id, {
         method: 'DELETE',
     });
     if (res.ok) {
