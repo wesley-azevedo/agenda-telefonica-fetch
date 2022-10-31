@@ -1,8 +1,8 @@
-contactList = JSON.parse(localStorage.getItem('contactList'))
-console.log(contactList)
-contactFilter = JSON.parse(localStorage.getItem('contactFilter'))
-console.log(contactFilter)
-order = localStorage.getItem('order')
+contactList = JSON.parse(localStorage.getItem('contactList'));
+console.log(contactList);
+contactFilter = JSON.parse(localStorage.getItem('contactFilter'));
+console.log(contactFilter);
+order = localStorage.getItem('order');
 
 function orderList() {
     if (order == "asc") {
@@ -20,26 +20,26 @@ function checkCredential() {
         window.location.href = "login.html"
     } else {
         localStorage.setItem('order', "asc")
-        updateContacts()
+        updateContacts();
         escreverHTML();
     }
-}
+};
 
 function logout() {
     localStorage.setItem('logged', false);
-    window.location.href = "login.html"
-}
+    window.location.href = "login.html";
+};
 
 async function updateContacts() {
     let response = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa');
     let body = await response.json();
-    localStorage.setItem('contactList', JSON.stringify(body))
-    contactList = JSON.parse(localStorage.getItem('contactList'))
-}
+    localStorage.setItem('contactList', JSON.stringify(body));
+    contactList = JSON.parse(localStorage.getItem('contactList'));
+};
 
 async function addContact() {
-    let addName = inputAddName.value
-    let addPhone = inputAddPhone.value
+    let addName = inputAddName.value;
+    let addPhone = inputAddPhone.value;
     let addNewContact = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa', {
         method: "POST",
         headers: {
@@ -52,8 +52,8 @@ async function addContact() {
     })
     console.log(addNewContact)
     if (addNewContact.ok) {
-        console.log('adicionei')
-        updateContacts()
+        console.log('adicionei');
+        updateContacts();
         window.location.reload(false);
     }
 }
@@ -61,14 +61,21 @@ async function addContact() {
 function escreverHTML() {
 
     if (contactFilter != [0]) {
-        numberOfContacts.innerHTML = contactFilter.length
+        numberOfContacts.innerHTML = contactFilter.length;
         contactFilter.forEach(item => {
             let contact = document.createElement("tr");
             contact.id = `contact${item.id}`;
             document.querySelector('#contactsBody').appendChild(contact);
 
             let id = document.createElement("td");
-            id.innerHTML = `${item.id}`;
+            id.id = `id${item.id}`;
+            document.querySelector(`#${contact.id}`).appendChild(id);
+            let starIcon = document.createElement("i");
+            starIcon.id = `starIcon${item.id}`;
+            starIcon.classList = "bi bi-star";
+            document.querySelector(`#id${item.id}`).appendChild(starIcon);
+            
+            starIcon.classList = "bi bi-star-fill";
             document.querySelector(`#${contact.id}`).appendChild(id);
 
             let name = document.createElement("td");
@@ -84,37 +91,41 @@ function escreverHTML() {
             document.querySelector(`#${contact.id}`).appendChild(options);
 
             let editBtn = document.createElement("button");
-            editBtn.id = `edit${item.id}`
-            editBtn.type = 'button'
-            editBtn.addEventListener("click", () => {updateContact(item.id)})
-            editBtn.classList = "btn btn-outline-warning m-1"         
+            editBtn.id = `edit${item.id}`;
+            editBtn.type = 'button';
+            editBtn.addEventListener("click", () => {updateContact(item.id)});
+            editBtn.classList = "btn btn-outline-warning m-1";  
             document.querySelector(`#${options.id}`).appendChild(editBtn);
-            let editIcon = document.createElement("i")
-            editIcon.classList = "bi bi-pencil-square"
+            let editIcon = document.createElement("i");
+            editIcon.classList = "bi bi-pencil-square";
             document.querySelector(`#edit${item.id}`).appendChild(editIcon);
 
             let deleteBtn = document.createElement("button");
             deleteBtn.id = `delete${item.id}`
-            console.log(deleteBtn)
-            deleteBtn.type = 'button'
-            deleteBtn.addEventListener("click", () => {deleteContact(item.id)})
-            deleteBtn.classList = "btn btn-outline-danger m-1"
+            console.log(deleteBtn);
+            deleteBtn.type = 'button';
+            deleteBtn.addEventListener("click", () => {deleteContact(item.id)});
+            deleteBtn.classList = "btn btn-outline-danger m-1";
             document.querySelector(`#${options.id}`).appendChild(deleteBtn);
-            let deleteIcon = document.createElement("i")
-            deleteIcon.classList = "bi bi-trash"
+            let deleteIcon = document.createElement("i");
+            deleteIcon.classList = "bi bi-trash";
             document.querySelector(`#delete${item.id}`).appendChild(deleteIcon);
             
         })
     } else {
-        numberOfContacts.innerHTML = contactList.length
+        numberOfContacts.innerHTML = contactList.length;
         contactList.forEach(item => {
             let contact = document.createElement("tr");
             contact.id = `contact${item.id}`;
             document.querySelector('#contactsBody').appendChild(contact);
 
             let id = document.createElement("td");
-            id.innerHTML = `${item.id}`;
+            id.id = `id${item.id}`;
             document.querySelector(`#${contact.id}`).appendChild(id);
+            let starIcon = document.createElement("i");
+            starIcon.id = `starIcon${item.id}`;
+            starIcon.classList = "bi bi-star";
+            document.querySelector(`#id${item.id}`).appendChild(starIcon); 
 
             let name = document.createElement("td");
             name.innerHTML = `${item.nome}`;
@@ -130,47 +141,46 @@ function escreverHTML() {
 
             let editBtn = document.createElement("button");
             editBtn.id = `edit${item.id}`
-            editBtn.type = 'button'
-            editBtn.addEventListener("click", () => {updateContact(item.id)})
-            editBtn.classList = "btn btn-outline-warning m-1"         
+            editBtn.type = 'button';
+            editBtn.addEventListener("click", () => {updateContact(item.id)});
+            editBtn.classList = "btn btn-outline-warning m-1";
             document.querySelector(`#${options.id}`).appendChild(editBtn);
-            let editIcon = document.createElement("i")
-            editIcon.classList = "bi bi-pencil-square"
+            let editIcon = document.createElement("i");
+            editIcon.classList = "bi bi-pencil-square";
             document.querySelector(`#edit${item.id}`).appendChild(editIcon);
-            
         
             let deleteBtn = document.createElement("button");
-            deleteBtn.id = `delete${item.id}`
-            console.log(deleteBtn)
-            deleteBtn.type = 'button'
-            deleteBtn.addEventListener("click", () => {deleteContact(item.id)})
-            deleteBtn.classList = "btn btn-outline-danger m-1"
+            deleteBtn.id = `delete${item.id}`;
+            console.log(deleteBtn);
+            deleteBtn.type = 'button';
+            deleteBtn.addEventListener("click", () => {deleteContact(item.id)});
+            deleteBtn.classList = "btn btn-outline-danger m-1";
             document.querySelector(`#${options.id}`).appendChild(deleteBtn);
-            let deleteIcon = document.createElement("i")
-            deleteIcon.classList = "bi bi-trash"
+            let deleteIcon = document.createElement("i");
+            deleteIcon.classList = "bi bi-trash";
             document.querySelector(`#delete${item.id}`).appendChild(deleteIcon);
         })
     }
 }
 
 function searchContact() {
-    const filterName = nameFilter.value
-    console.log(filterName)
+    const filterName = nameFilter.value;
+    console.log(filterName);
 
     if (filterName != "") {
-        contactFilter = contactList.filter(item => item.nome == filterName)
-        console.log(contactFilter)
-        localStorage.setItem('contactFilter', JSON.stringify(contactFilter))
+        contactFilter = contactList.filter(item => item.nome == filterName);
+        console.log(contactFilter);
+        localStorage.setItem('contactFilter', JSON.stringify(contactFilter));
         window.location.reload(false);
     } else {
-        localStorage.setItem('contactFilter', [0])
+        localStorage.setItem('contactFilter', [0]);
         window.location.reload(false);
     }
 }
 
 async function updateContact(id) {
-    let editedName = prompt("nome?")
-    let editedPhone = prompt("idade?")
+    let editedName = prompt("nome?");
+    let editedPhone = prompt("idade?");
 
     let response = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa/' + id, {
         method: 'PUT',
@@ -185,7 +195,7 @@ async function updateContact(id) {
     if (response.ok) {
         window.location.reload(false);        
     } else {
-        alert('erro ao atualizar contato')
+        alert('erro ao atualizar contato');
     }
 }
 
