@@ -84,18 +84,25 @@ function escreverHTML() {
             document.querySelector(`#${contact.id}`).appendChild(options);
 
             let editBtn = document.createElement("button");
+            editBtn.id = `edit${item.id}`
             editBtn.type = 'button'
-            editBtn.innerHTML = 'editar'
-            editBtn.classList = "btn btn-outline-secondary m-1"
             editBtn.addEventListener("click", () => {updateContact(item.id)})
+            editBtn.classList = "btn btn-outline-warning m-1"         
             document.querySelector(`#${options.id}`).appendChild(editBtn);
+            let editIcon = document.createElement("i")
+            editIcon.classList = "bi bi-pencil-square"
+            document.querySelector(`#edit${item.id}`).appendChild(editIcon);
 
             let deleteBtn = document.createElement("button");
+            deleteBtn.id = `delete${item.id}`
+            console.log(deleteBtn)
             deleteBtn.type = 'button'
-            deleteBtn.innerHTML = 'excluir'
-            deleteBtn.classList = "btn btn-outline-secondary m-1"
             deleteBtn.addEventListener("click", () => {deleteContact(item.id)})
+            deleteBtn.classList = "btn btn-outline-danger m-1"
             document.querySelector(`#${options.id}`).appendChild(deleteBtn);
+            let deleteIcon = document.createElement("i")
+            deleteIcon.classList = "bi bi-trash"
+            document.querySelector(`#delete${item.id}`).appendChild(deleteIcon);
             
         })
     } else {
@@ -122,20 +129,26 @@ function escreverHTML() {
             document.querySelector(`#${contact.id}`).appendChild(options);
 
             let editBtn = document.createElement("button");
-            editBtn.id = item.id
+            editBtn.id = `edit${item.id}`
             editBtn.type = 'button'
-            editBtn.innerHTML = 'editar'
             editBtn.addEventListener("click", () => {updateContact(item.id)})
-            editBtn.classList = "btn btn-outline-secondary m-1"         
+            editBtn.classList = "btn btn-outline-warning m-1"         
             document.querySelector(`#${options.id}`).appendChild(editBtn);
+            let editIcon = document.createElement("i")
+            editIcon.classList = "bi bi-pencil-square"
+            document.querySelector(`#edit${item.id}`).appendChild(editIcon);
             
         
             let deleteBtn = document.createElement("button");
+            deleteBtn.id = `delete${item.id}`
+            console.log(deleteBtn)
             deleteBtn.type = 'button'
-            deleteBtn.innerHTML = 'excluir'
             deleteBtn.addEventListener("click", () => {deleteContact(item.id)})
-            deleteBtn.classList = "btn btn-outline-secondary m-1"
+            deleteBtn.classList = "btn btn-outline-danger m-1"
             document.querySelector(`#${options.id}`).appendChild(deleteBtn);
+            let deleteIcon = document.createElement("i")
+            deleteIcon.classList = "bi bi-trash"
+            document.querySelector(`#delete${item.id}`).appendChild(deleteIcon);
         })
     }
 }
