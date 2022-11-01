@@ -11,8 +11,7 @@ function checkCredential() {
     } else {
         localStorage.setItem('order', "asc")
         localStorage.getItem('order')
-        updateContacts();
-        escreverHTML();
+        writeHTML();
     }
 }
 
@@ -24,19 +23,12 @@ function orderList() {
     } else {
         "reverse()"
     }
-    escreverHTML();
+    writeHTML();
 }
 
 function logout() {
     localStorage.setItem('logged', false);
     window.location.href = "login.html";
-}
-
-async function updateContacts() {
-    let response = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa');
-    let body = await response.json();
-    localStorage.setItem('contactList', JSON.stringify(body));
-    contactList = JSON.parse(localStorage.getItem('contactList'));
 }
 
 async function addContact() {
@@ -55,12 +47,16 @@ async function addContact() {
     console.log(addNewContact)
     if (addNewContact.ok) {
         console.log('adicionei');
-        updateContacts();
-        window.location.reload(false);
+        location.reload();
     }
 }
 
-function escreverHTML() {
+async function writeHTML() {
+
+    let response = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa');
+    let body = await response.json();
+    localStorage.setItem('contactList', JSON.stringify(body));
+    contactList = JSON.parse(localStorage.getItem('contactList'));
 
     if (contactFilter != [0]) {
         numberOfContacts.innerHTML = contactFilter.length;
@@ -106,7 +102,6 @@ function escreverHTML() {
 
             let deleteBtn = document.createElement("button");
             deleteBtn.id = `delete${item.id}`
-            console.log(deleteBtn);
             deleteBtn.type = 'button';
             deleteBtn.addEventListener("click", () => {deleteContact(item.id)});
             deleteBtn.classList = "btn btn-outline-danger m-1";
@@ -160,7 +155,6 @@ function escreverHTML() {
         
             let deleteBtn = document.createElement("button");
             deleteBtn.id = `delete${item.id}`;
-            console.log(deleteBtn);
             deleteBtn.type = 'button';
             deleteBtn.addEventListener("click", () => {deleteContact(item.id)});
             deleteBtn.classList = "btn btn-outline-danger m-1";
@@ -183,21 +177,20 @@ function favoriteContact(id) {
         localStorage.setItem('favoriteList', JSON.stringify(favoriteList));
         console.log(favoriteList);
     }
+    location.reload();
 }
 
 function searchContact() {
     const filterName = nameFilter.value;
     console.log(filterName);
-
     if (filterName != "") {
         contactFilter = contactList.filter(item => item.nome == filterName);
         console.log(contactFilter);
         localStorage.setItem('contactFilter', JSON.stringify(contactFilter));
-        window.location.reload(false);
     } else {
         localStorage.setItem('contactFilter', [0]);
-        window.location.reload(false);
     }
+    location.reload();
 }
 
 async function updateContact(id) {
@@ -215,10 +208,11 @@ async function updateContact(id) {
         })
     });
     if (response.ok) {
-        window.location.reload(false);        
+        console.log("atualizei")  
     } else {
         alert('erro ao atualizar contato');
     }
+    location.reload(); 
 }
 
 async function deleteContact(id) {
@@ -226,10 +220,11 @@ async function deleteContact(id) {
         method: 'DELETE',
     });
     if (res.ok) {
-        window.location.href = "application.html"
+        console.log("deletei")
     } else {
         console.log(res.statusText)
     }
+    location.reload();
 }
 
 
