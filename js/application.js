@@ -3,6 +3,18 @@ console.log(contactList);
 contactFilter = JSON.parse(localStorage.getItem('contactFilter'));
 console.log(contactFilter);
 order = localStorage.getItem('order');
+favoriteList = JSON.parse(localStorage.getItem('favoriteList'));
+
+function checkCredential() {
+    if (localStorage.getItem('logged') === false) {
+        window.location.href = "login.html"
+    } else {
+        localStorage.setItem('order', "asc")
+        localStorage.getItem('order')
+        updateContacts();
+        escreverHTML();
+    }
+}
 
 function orderList() {
     if (order == "asc") {
@@ -15,27 +27,17 @@ function orderList() {
     escreverHTML();
 }
 
-function checkCredential() {
-    if (localStorage.getItem('logged') === false) {
-        window.location.href = "login.html"
-    } else {
-        localStorage.setItem('order', "asc")
-        updateContacts();
-        escreverHTML();
-    }
-};
-
 function logout() {
     localStorage.setItem('logged', false);
     window.location.href = "login.html";
-};
+}
 
 async function updateContacts() {
     let response = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa');
     let body = await response.json();
     localStorage.setItem('contactList', JSON.stringify(body));
     contactList = JSON.parse(localStorage.getItem('contactList'));
-};
+}
 
 async function addContact() {
     let addName = inputAddName.value;
@@ -72,11 +74,13 @@ function escreverHTML() {
             document.querySelector(`#${contact.id}`).appendChild(id);
             let starIcon = document.createElement("i");
             starIcon.id = `starIcon${item.id}`;
-            starIcon.classList = "bi bi-star";
-            document.querySelector(`#id${item.id}`).appendChild(starIcon);
-            
-            starIcon.classList = "bi bi-star-fill";
-            document.querySelector(`#${contact.id}`).appendChild(id);
+            if (favoriteList.includes(item.id)) {
+                starIcon.classList = "bi bi-star";                
+            } else {
+                starIcon.classList = "bi bi-star-fill";
+            }
+            starIcon.addEventListener("click", () => {favoriteContact(item.id)});
+            document.querySelector(`#id${item.id}`).appendChild(starIcon); 
 
             let name = document.createElement("td");
             name.innerHTML = `${item.nome}`;
@@ -124,7 +128,12 @@ function escreverHTML() {
             document.querySelector(`#${contact.id}`).appendChild(id);
             let starIcon = document.createElement("i");
             starIcon.id = `starIcon${item.id}`;
-            starIcon.classList = "bi bi-star";
+            if (favoriteList.includes(item.id)) {
+                starIcon.classList = "bi bi-star";                
+            } else {
+                starIcon.classList = "bi bi-star-fill";
+            }
+            starIcon.addEventListener("click", () => {favoriteContact(item.id)});
             document.querySelector(`#id${item.id}`).appendChild(starIcon); 
 
             let name = document.createElement("td");
@@ -160,6 +169,19 @@ function escreverHTML() {
             deleteIcon.classList = "bi bi-trash";
             document.querySelector(`#delete${item.id}`).appendChild(deleteIcon);
         })
+    }
+}
+
+function favoriteContact(id) {
+    if (favoriteList.includes(id)) {
+        indexFavoriteId = favoriteList.indexOf(id);
+        favoriteList.splice(indexFavoriteId, 1)
+        localStorage.setItem('favoriteList', JSON.stringify(favoriteList));
+        console.log(favoriteList);
+    } else {
+        favoriteList.push(id);
+        localStorage.setItem('favoriteList', JSON.stringify(favoriteList));
+        console.log(favoriteList);
     }
 }
 
@@ -204,7 +226,7 @@ async function deleteContact(id) {
         method: 'DELETE',
     });
     if (res.ok) {
-        updateContacts();
+        window.location.href = "application.html"
     } else {
         console.log(res.statusText)
     }
