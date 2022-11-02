@@ -1,10 +1,7 @@
 contactList = JSON.parse(localStorage.getItem('contactList'));
-console.log(contactList);
 contactFilter = JSON.parse(localStorage.getItem('contactFilter'));
-console.log(contactFilter);
-order = localStorage.getItem('order');
 favoriteList = [];
-console.log(favoriteList)
+order = [];
 
 function checkCredential() {
     if (localStorage.getItem('logged') === false) {
@@ -18,14 +15,12 @@ function checkCredential() {
 }
 
 function orderList() {
-    if (order == "asc") {
-        contactList.sort(function(a,b) {
-            return a.nome < b.nome ? -1 : a.nome > b.nome ? 1 : 0;
-        });
+    if (localStorage.getItem('order') == "asc") {
+        order = localStorage.setItem('order', "desc");
     } else {
-        "reverse()"
+        order = localStorage.setItem('order', "asc");
     }
-    writeHTML();
+    location.reload();
 }
 
 function logout() {
@@ -57,8 +52,13 @@ async function writeHTML() {
 
     let response = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa');
     let body = await response.json();
-    localStorage.setItem('contactList', JSON.stringify(body));
+    localStorage.setItem('contactList', JSON.stringify(body.sort(function(a,b) {
+        return a.nome < b.nome ? -1 : a.nome > b.nome ? 1 : 0;
+    })));
     contactList = JSON.parse(localStorage.getItem('contactList'));
+    if (localStorage.getItem('order') != "asc") {
+        contactList = JSON.parse(localStorage.getItem('contactList')).reverse();
+    }
 
     if (contactFilter != [0]) {
         numberOfContacts.innerHTML = contactFilter.length;
@@ -173,21 +173,17 @@ function favoriteContact(id) {
         indexFavoriteId = favoriteList.indexOf(id);
         favoriteList.splice(indexFavoriteId, 1)
         localStorage.setItem('favoriteList', JSON.stringify(favoriteList));
-        console.log(favoriteList);
     } else {
         favoriteList.push(id);
         localStorage.setItem('favoriteList', JSON.stringify(favoriteList));
-        console.log(favoriteList);
     }
     location.reload();
 }
 
 function searchContact() {
     const filterName = nameFilter.value.toLowerCase();
-    console.log(filterName);
     if (filterName != "") {
         contactFilter = contactList.filter(item => item.nome.toLowerCase() == filterName);
-        console.log(contactFilter);
         localStorage.setItem('contactFilter', JSON.stringify(contactFilter));
     } else {
         localStorage.setItem('contactFilter', [0]);
@@ -228,6 +224,3 @@ async function deleteContact(id) {
     }
     location.reload();
 }
-
-
-
