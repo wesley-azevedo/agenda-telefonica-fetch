@@ -4,6 +4,7 @@ contactFilter = JSON.parse(localStorage.getItem('contactFilter'));
 console.log(contactFilter);
 order = localStorage.getItem('order');
 favoriteList = JSON.parse(localStorage.getItem('favoriteList'));
+console.log(favoriteList)
 
 function checkCredential() {
     if (localStorage.getItem('logged') === false) {
@@ -181,10 +182,10 @@ function favoriteContact(id) {
 }
 
 function searchContact() {
-    const filterName = nameFilter.value;
+    const filterName = nameFilter.value.toLowerCase();
     console.log(filterName);
     if (filterName != "") {
-        contactFilter = contactList.filter(item => item.nome == filterName);
+        contactFilter = contactList.filter(item => item.nome.toLowerCase() == filterName);
         console.log(contactFilter);
         localStorage.setItem('contactFilter', JSON.stringify(contactFilter));
     } else {
