@@ -3,15 +3,16 @@ console.log(contactList);
 contactFilter = JSON.parse(localStorage.getItem('contactFilter'));
 console.log(contactFilter);
 order = localStorage.getItem('order');
-favoriteList = JSON.parse(localStorage.getItem('favoriteList'));
+favoriteList = [];
 console.log(favoriteList)
 
 function checkCredential() {
     if (localStorage.getItem('logged') === false) {
         window.location.href = "login.html"
     } else {
-        localStorage.setItem('order', "asc")
-        localStorage.getItem('order')
+        if (localStorage.getItem('favoriteList') != null) {
+            favoriteList = JSON.parse(localStorage.getItem('favoriteList'));
+        }
         writeHTML();
     }
 }
