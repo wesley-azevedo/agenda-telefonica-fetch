@@ -1,7 +1,8 @@
-contactList = JSON.parse(localStorage.getItem('contactList'));
-contactFilter = JSON.parse(localStorage.getItem('contactFilter'));
-favoriteList = [];
-order = [];
+let contactList = JSON.parse(localStorage.getItem('contactList'));
+let contactFilter = JSON.parse(localStorage.getItem('contactFilter'));
+let favoriteList = [];
+let order = [];
+let idEdit = "";
 
 function checkCredential() {
     if (localStorage.getItem('logged') === false) {
@@ -10,7 +11,6 @@ function checkCredential() {
         if (localStorage.getItem('favoriteList') != null) {
             favoriteList = JSON.parse(localStorage.getItem('favoriteList'));
         }
-
         writeHTML();
     }
 }
@@ -47,6 +47,40 @@ async function addContact() {
         console.log('adicionei');
         location.reload();
     }
+}
+
+async function editContact() {
+    let editedId = editId.value;
+    let editedName = inputEditName.value;
+    let editedPhone = inputEditPhone.value;
+
+    let response = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa/' + editedId, {
+        method: 'PUT',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            nome: editedName,
+            idade: editedPhone
+        })
+    });
+    if (response.ok) {
+        console.log("atualizei")
+    } else {
+        alert('erro ao atualizar contato');
+    }
+    location.reload();
+    console.log("teste")
+}
+
+async function showContact(id) {
+    console.log(id)
+    contactToShow = contactList.filter(item => item.id == id)
+    contactToShow.forEach(element => {
+        inputEditName.value = element.nome;
+        inputEditPhone.value = element.idade;
+        editId.value = id
+    });
 }
 
 async function writeHTML() {
@@ -101,10 +135,9 @@ async function writeHTML() {
         let editBtn = document.createElement("button");
         editBtn.id = `edit${item.id}`;
         editBtn.type = 'button';
-        editBtn.data = "modal"
-        editBtn.target = "#addContact"
-
-        editBtn.addEventListener("click", () => { updateContact(item.id) });
+        editBtn.setAttribute("data-bs-toggle", "modal");
+        editBtn.setAttribute("data-bs-target", "#editContact");
+        editBtn.addEventListener("click", () => { showContact(item.id) });
         editBtn.classList = "btn btn-outline-warning m-1";
         document.querySelector(`#${options.id}`).appendChild(editBtn);
         let editIcon = document.createElement("i");
@@ -142,28 +175,6 @@ function searchContact() {
         localStorage.setItem('contactFilter', JSON.stringify(contactFilter));
     } else {
         contactFilter = localStorage.setItem('contactFilter', [0]);
-    }
-    location.reload();
-}
-
-async function updateContact(id) {
-    let editedName = prompt("nome?");
-    let editedPhone = prompt("idade?");
-
-    let response = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa/' + id, {
-        method: 'PUT',
-        headers: {
-            'content-type': 'application/json'
-        },
-        body: JSON.stringify({
-            nome: editedName,
-            idade: editedPhone
-        })
-    });
-    if (response.ok) {
-        console.log("atualizei")
-    } else {
-        alert('erro ao atualizar contato');
     }
     location.reload();
 }
