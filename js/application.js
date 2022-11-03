@@ -73,13 +73,23 @@ async function editContact() {
     console.log("teste")
 }
 
-async function showContact(id) {
+async function showEditContact(id) {
     console.log(id)
     contactToShow = contactList.filter(item => item.id == id)
     contactToShow.forEach(element => {
         inputEditName.value = element.nome;
         inputEditPhone.value = element.idade;
         editId.value = id
+    });
+}
+
+async function showDeleteContact(id) {
+    console.log(id)
+    contactToShow = contactList.filter(item => item.id == id)
+    contactToShow.forEach(element => {
+        contactName.innerHTML = element.nome;
+        deleteId.value = id
+        console.log(deleteId.value)
     });
 }
 
@@ -137,7 +147,7 @@ async function writeHTML() {
         editBtn.type = 'button';
         editBtn.setAttribute("data-bs-toggle", "modal");
         editBtn.setAttribute("data-bs-target", "#editContact");
-        editBtn.addEventListener("click", () => { showContact(item.id) });
+        editBtn.addEventListener("click", () => {showEditContact(item.id)});
         editBtn.classList = "btn btn-outline-warning m-1";
         document.querySelector(`#${options.id}`).appendChild(editBtn);
         let editIcon = document.createElement("i");
@@ -147,7 +157,9 @@ async function writeHTML() {
         let deleteBtn = document.createElement("button");
         deleteBtn.id = `delete${item.id}`
         deleteBtn.type = 'button';
-        deleteBtn.addEventListener("click", () => { deleteContact(item.id) });
+        deleteBtn.setAttribute("data-bs-toggle", "modal");
+        deleteBtn.setAttribute("data-bs-target", "#deleteContact");
+        deleteBtn.addEventListener("click", () => {showDeleteContact(item.id)});
         deleteBtn.classList = "btn btn-outline-danger m-1";
         document.querySelector(`#${options.id}`).appendChild(deleteBtn);
         let deleteIcon = document.createElement("i");
@@ -179,14 +191,14 @@ function searchContact() {
     location.reload();
 }
 
-async function deleteContact(id) {
-    let res = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa/' + id, {
+async function deleteContact() {
+    let response = await fetch('https://633867b7937ea77bfdbf9c86.mockapi.io/pessoa/' + deleteId.value, {
         method: 'DELETE',
     });
-    if (res.ok) {
+    if (response.ok) {
         console.log("deletei")
     } else {
-        console.log(res.statusText)
+        console.log(response.statusText)
     }
     location.reload();
 }
